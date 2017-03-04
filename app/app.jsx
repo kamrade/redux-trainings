@@ -13,3 +13,5 @@ ReactDOM.render(
 	<p className="message-text">Boilerplate 3 Project</p>,
 	document.getElementById('app')
 );
+
+require('./redux-example.jsx')
