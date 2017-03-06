@@ -19,12 +19,24 @@ var reducer = (state = stateDefault, action) => {
     }
     return state;
 };
-var store = redux.createStore(reducer);
-console.log('currentState', store.getState());
+
+var store = redux.createStore(reducer, redux.compose(
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+));
+
+// Subscribe to changes
+store.subscribe(() => {
+    var state = store.getState();
+    document.getElementById('app').innerHTML = state.searchText;
+    console.log('Name is', state.searchText);
+});
 
 store.dispatch({
     type: 'CHANGE_SEARCH_TEXT',
-    searchText: 'New Text'
+    searchText: 'Find My Cat'
 });
 
-console.log('Search text should be New Text', store.getState());
+store.dispatch({
+    type: 'CHANGE_SEARCH_TEXT',
+    searchText: 'Find Something Else'
+});
