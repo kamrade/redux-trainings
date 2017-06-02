@@ -1,0 +1,7 @@
+1. Working with redux is the same as you working with normal js object, but with using dispatchers. Every dispatcher should consist of property name and certain value.
+
+2. Pure function. Giving same input we always gona get same output. It don't relay with variables outside function.
+    There is 3 principes:
+    1. Same output with the same input
+    2. No side effects. Can't take vars from the global state. Shouldn't update any variables outside of it.
+    3. Avoid promices and asyncronise code. Function should be syncronise.

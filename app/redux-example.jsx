@@ -2,16 +2,18 @@ var redux = require('redux');
 
 console.log('Starting redux example');
 
-function changeProp (obj) {
-    return {
-        ...obj,
-        name: 'Jen'
-    }
+function changeProp(obj) {
+  return {
+    ...obj,
+    name: 'Nas'
+  }
 }
 
-var res = changeProp({
-    name: 'Andrew',
-    age: 25
-});
+let startingValue = {
+  name: 'Denis',
+  age: 35
+};
+let res = changeProp(startingValue);
 
+console.log(startingValue);
 console.log(res);
