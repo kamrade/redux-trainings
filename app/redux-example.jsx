@@ -2,18 +2,11 @@ var redux = require('redux');
 
 console.log('Starting redux example');
 
-function changeProp(obj) {
-  return {
-    ...obj,
-    name: 'Nas'
-  }
-}
+var reducer = (state = { name: 'Anonymous' }, action) => {
+  // state = state || { name: 'Anonymous' };
 
-let startingValue = {
-  name: 'Denis',
-  age: 35
+  return state;
 };
-let res = changeProp(startingValue);
-
-console.log(startingValue);
-console.log(res);
+var store = redux.createStore(reducer);
+var currentState = store.getState();
+console.log('currentState', currentState);

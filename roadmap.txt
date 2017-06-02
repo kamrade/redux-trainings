@@ -5,3 +5,6 @@
     1. Same output with the same input
     2. No side effects. Can't take vars from the global state. Shouldn't update any variables outside of it.
     3. Avoid promices and asyncronise code. Function should be syncronise.
+
+3. For most of your apps you gonna be using one store, which means you gonna have one object, represents entire application.
+    - reducer - is the funciton that takes the state and actions, and combine them to return new state.
