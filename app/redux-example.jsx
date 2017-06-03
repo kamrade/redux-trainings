@@ -1,4 +1,5 @@
 var redux = require('redux');
+var axios = require('axios');
 
 console.log('Starting redux example');
 
@@ -15,6 +16,15 @@ var nameReducer = (state = 'Anonymous', action) => {
       return action.name;
     default:
       return state;
+  };
+};
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// Action Change Name
+var changeName = (name) => {
+  return {
+    type: 'CHANGE_NAME',
+    name
   };
 };
 
@@ -38,6 +48,43 @@ var hobbiesReducer = (state = [], action) => {
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
+// Action Add Hobby
+var addHobby = (hobby) => {
+  return {
+    type: 'ADD_HOBBY',
+    hobby
+  }
+};
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// Action Remove Hobby
+var removeHobby = (id) => {
+  return {
+    type: 'REMOVE_HOBBY',
+    id
+  }
+}
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// Action Add Movie
+var addMovie = (title, genre) => {
+  return {
+    type: 'ADD_MOVIE',
+    title,
+    genre
+  }
+};
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// Action Remove Movie
+var removeMovie = (id) => {
+  return {
+    type: 'REMOVE_MOVIE',
+    id
+  }
+}
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
 // reducer for movies
 var moviesReducer = (state = [], action) => {
   switch (action.type) {
@@ -56,12 +103,55 @@ var moviesReducer = (state = [], action) => {
       return state;
   }
 };
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// map reducer
+var mapReducer = (state = { isFetching: false, url: undefined }, action) => {
+  switch (action.type) {
+    case 'START_LOCATION_FETCH':
+      return {
+        isFetching: true,
+        url: undefined
+      };
+    case 'COMPLETE_LOCATION_FETCH':
+      return {
+        isFetching: false,
+        url: action.url
+      };
+    default:
+      return state;
+  }
+};
+
+var startLocationFetch = () => {
+  return {
+    type: 'START_LOCATION_FETCH'
+  };
+};
+
+var completeLocationFetch = (url) => {
+  return {
+    type: 'COMPLETE_LOCATION_FETCH',
+    url
+  };
+};
+
+var fetchLocation = () => {
+  store.dispatch( startLocationFetch() );
+  axios.get('http://ipinfo.io').then((res) => {
+    var loc = res.data.loc;
+    var baseUrl = 'http://maps.google.com?q=';
+    store.dispatch( completeLocationFetch(baseUrl + loc) );
+  });
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++
 // reducers combiner
 var reducer = redux.combineReducers({
   name:    nameReducer,
   hobbies: hobbiesReducer,
-  movies:  moviesReducer
+  movies:  moviesReducer,
+  map:     mapReducer
 });
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
@@ -77,69 +167,34 @@ var store = redux.createStore(reducer, redux.compose(
 var unsubscribe = store.subscribe(() => {
   var state = store.getState();
   console.log(state);
-  document.getElementById("app").innerHTML = state.name;
+  // document.getElementById("app").innerHTML = state.name;
+
+  if(state.map.isFetching) {
+    document.getElementById("app").innerHTML = '___Loading___';
+  } else if(state.map.url) {
+
+    document.getElementById("app").innerHTML = '<a target="_blank" href="' + state.map.url + '">Your Location</a>'
+    console.log( performance.now() );
+  }
+
 });
 // unsubscribe();
-
 // +++++++++++++++++++++++++++++++++++++++++++++++
 // show current state before dispatch
 var currentState = store.getState();
 console.log('currentState', currentState);
 
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Denis'
-});
+console.log( performance.now() );
+fetchLocation();
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Running'
-});
-
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Walking'
-});
-
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Nas'
-})
-
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'ADD_MOVIE',
-  title: 'Mad Max',
-  genre: 'Action'
-});
-
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'ADD_MOVIE',
-  title: 'Star Wars',
-  genre: 'Action'
-});
-
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'REMOVE_HOBBY',
-  id: 2
-});
-
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher
-store.dispatch({
-  type: 'REMOVE_MOVIE',
-  id: 1
-});
+// dispatchers
+store.dispatch( changeName('Denis') );
+store.dispatch( addHobby('Running') );
+store.dispatch( addHobby('Walking') );
+store.dispatch( changeName('Nas') );
+store.dispatch( changeName('Ivan') );
+store.dispatch( addMovie('Mad Max', 'Action') );
+store.dispatch( addMovie('Star Wars', 'Action') );
+store.dispatch( removeHobby(2) );
+store.dispatch( removeMovie(1) );
