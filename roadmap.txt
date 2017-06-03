@@ -11,3 +11,4 @@
     - subscribe - keep track of your data as it changes
 
 ### Redux dev tools
+### Add and remove items in array

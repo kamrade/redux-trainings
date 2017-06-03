@@ -42,6 +42,16 @@ var reducer = (state = stateDefault, action) => {
           }
         ]
       };
+    case 'REMOVE_HOBBY':
+      return {
+        ...state,
+        hobbies: state.hobbies.filter( (hobby) => hobby.id !== action.id )
+      };
+    case 'REMOVE_MOVIE':
+      return {
+        ...state,
+        movies: state.movies.filter( (movie) => movie.id !== movie.id )
+      };
     default:
       return state;
   }
@@ -70,30 +80,59 @@ var currentState = store.getState();
 console.log('currentState', currentState);
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher NAME 1
+// dispatcher
 store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Denis'
 });
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher HOBBIES
+// dispatcher
 store.dispatch({
   type: 'ADD_HOBBY',
   hobby: 'Running'
 });
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher NAME 2
+// dispatcher
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'Walking'
+});
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// dispatcher
 store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Nas'
 })
 
 // +++++++++++++++++++++++++++++++++++++++++++++++
-// dispatcher HOBBIES
+// dispatcher
 store.dispatch({
   type: 'ADD_MOVIE',
   title: 'Mad Max',
   genre: 'Action'
+});
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// dispatcher
+store.dispatch({
+  type: 'ADD_MOVIE',
+  title: 'Star Wars',
+  genre: 'Action'
+});
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// dispatcher
+store.dispatch({
+  type: 'REMOVE_HOBBY',
+  id: 2
+});
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+// dispatcher
+store.dispatch({
+  type: 'REMOVE_MOVIE',
+  id: 1
 });
