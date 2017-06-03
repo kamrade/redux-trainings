@@ -13,6 +13,6 @@
 ### Redux dev tools
 ### Add and remove items in array
 ### Break up reducer. combineReducers
-### Actiong generator
-
+### Actions generator
 ### Asyns
+### Organize
